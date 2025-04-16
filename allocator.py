@@ -28,6 +28,9 @@ class MemoryAllocator:
         self.memory = merged
 
     def _find_block(self, size, strategy):
+        if strategy not in ('F', 'B', 'W'):
+            raise ValueError(f"Invalid allocation strategy '{strategy}'. Use 'F', 'B', or 'W'.")
+
         free_blocks = [b for b in self.memory if b.status == 'Free' and b.size() >= size]
         if not free_blocks:
             return None
@@ -37,7 +40,7 @@ class MemoryAllocator:
             return min(free_blocks, key=lambda b: b.size())
         elif strategy == 'W':
             return max(free_blocks, key=lambda b: b.size())
-        return None
+
 
     def request(self, process_name, size, strategy):
         # Check if process name already exists
@@ -46,16 +49,22 @@ class MemoryAllocator:
                 print(f"Error: Process '{process_name}' already exists.")
                 return
 
-        block = self._find_block(size, strategy)
+        try:
+            block = self._find_block(size, strategy)
+        except ValueError as e:
+            print("Error:", e)
+            return
+
         if not block:
             print("Error: Not enough memory for the process (external fragmentation).")
             return
+
         idx = self.memory.index(block)
         allocated = MemoryBlock(block.start, block.start + size - 1, 'Allocated', process_name)
         remaining_size = block.size() - size
         if remaining_size > 0:
             new_free = MemoryBlock(block.start + size, block.end)
-            self.memory[idx:idx + 1] = [allocated, new_free]
+            self.memory[idx:idx+1] = [allocated, new_free]
         else:
             self.memory[idx] = allocated
 
