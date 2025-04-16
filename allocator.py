@@ -40,16 +40,22 @@ class MemoryAllocator:
         return None
 
     def request(self, process_name, size, strategy):
+        # Check if process name already exists
+        for block in self.memory:
+            if block.status == 'Allocated' and block.process == process_name:
+                print(f"Error: Process '{process_name}' already exists.")
+                return
+
         block = self._find_block(size, strategy)
         if not block:
-            print("Error: Not enough memory for the process( external fragmentation ).")
+            print("Error: Not enough memory for the process (external fragmentation).")
             return
         idx = self.memory.index(block)
         allocated = MemoryBlock(block.start, block.start + size - 1, 'Allocated', process_name)
         remaining_size = block.size() - size
         if remaining_size > 0:
             new_free = MemoryBlock(block.start + size, block.end)
-            self.memory[idx:idx+1] = [allocated, new_free]
+            self.memory[idx:idx + 1] = [allocated, new_free]
         else:
             self.memory[idx] = allocated
 
