@@ -96,3 +96,17 @@ class MemoryAllocator:
             else:
                 print("Invalid command.")
 
+
+if __name__ == "__main__":
+    while True:
+        try:
+            mem_size = int(input("Enter memory size in bytes: "))
+            if mem_size <= 0:
+                print("Memory size must be a positive number.")
+                continue
+            break
+        except ValueError:
+            print("Invalid number, please try again.")
+
+    allocator = MemoryAllocator(mem_size)
+    allocator.run()
