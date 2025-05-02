@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def get_user_input():
     try:
         num_cylinders = int(input("Enter total number of cylinders (e.g., 5000): "))
@@ -79,6 +81,24 @@ def c_scan(queue, head, max_cylinder):
 
     return total_seek, order
 
+def plot_head_movement(order, algo):
+    steps = list(range(len(order)))
+    plt.figure(figsize=(10, 5))
+    plt.plot(order, steps, marker='o', linestyle='-', color='green', label=algo)
+
+    # Mark initial head
+    plt.scatter(order[0], steps[0], color='black', label='Initial Head')
+    plt.text(order[0], steps[0] + 0.5, 'Initial Head', ha='center', color='black')
+
+    plt.xlabel("Cylinder Position")
+    plt.ylabel("Time / Step")
+    plt.title("Disk Head Movement Visualization")
+    plt.grid(True)
+    plt.legend()
+    plt.gca().invert_yaxis()  # Time goes downward like your image
+    plt.tight_layout()
+    plt.show()
+
 def main():
     num_cylinders, queue, head, algo = get_user_input()
 
@@ -94,6 +114,8 @@ def main():
     print("Total Seek Time:", total_seek)
     print("Order of Head Movement:")
     print(" -> ".join(map(str, order)))
+
+    plot_head_movement(order, algo)
 
 if __name__ == "__main__":
     main()
