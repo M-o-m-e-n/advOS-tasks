@@ -12,6 +12,7 @@ This is a command-line based disk scheduling simulator written in Python. It sim
   - Number of cylinders
   - Queue of cylinder requests
   - Initial head position
+  - Direction of head movement (for SCAN and C-SCAN)
 - Displays:
   - Total seek time
   - Order of head movement
@@ -24,6 +25,7 @@ The program accepts user input to simulate disk scheduling:
 - `queue`: the cylinder numbers requested.
 - `head`: the starting position of the disk head.
 - `algorithm`: the strategy used to service the queue (FCFS, SCAN, or C-SCAN).
+- `direction`: head direction at the start (inner or outer) for SCAN/C-SCAN
 
 ## Getting Started
 
@@ -53,7 +55,8 @@ python disk-schedulingAlgorithms.py
 - Number of requests  
 - Request values (space-separated integers)  
 - Initial head position  
-- Scheduling algorithm (FCFS / SCAN / C-SCAN)
+- Scheduling algorithm (FCFS / SCAN / C-SCAN)  
+- Initial direction (outer / inner) for SCAN and C-SCAN
 
 ### Example
 
@@ -63,6 +66,7 @@ Enter the number of requests in the queue: 6
 Enter 6 cylinder requests separated by spaces: 98 183 37 122 14 124
 Enter initial head position (0 to 199): 53
 Enter algorithm to use (FCFS / SCAN / C-SCAN): SCAN
+Enter initial direction (outer / inner): outer
 
 --- Disk Scheduling Result ---
 Algorithm Used: SCAN
